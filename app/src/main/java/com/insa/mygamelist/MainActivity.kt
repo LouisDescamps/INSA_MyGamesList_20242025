@@ -20,7 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+
 import com.insa.mygamelist.data.GameItem
+import com.insa.mygamelist.data.GameNavigation
 import com.insa.mygamelist.data.IGDB
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,6 +37,9 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+            GameNavigation(navController)
+            /*
                 Scaffold(topBar = {
                     TopAppBar(colors = topAppBarColors(
                         containerColor = Color.Magenta,
@@ -46,6 +52,8 @@ class MainActivity : ComponentActivity() {
 
                     }
                 }
+
+             */
             }
         }
     }

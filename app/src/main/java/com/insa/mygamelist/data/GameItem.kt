@@ -3,6 +3,7 @@ package com.insa.mygamelist.data
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 
@@ -20,12 +21,13 @@ import coil3.compose.AsyncImage
 
 
 @Composable
-fun GameItem(game: Game) {
+fun GameItem(game: Game,onClick:()->Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(14.dp)
             .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
