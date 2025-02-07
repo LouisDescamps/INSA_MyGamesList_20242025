@@ -39,21 +39,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             GameNavigation(navController)
-            /*
-                Scaffold(topBar = {
-                    TopAppBar(colors = topAppBarColors(
-                        containerColor = Color.Magenta,
-                        titleContentColor = Color.Black,
-                    ), title = { Text("My Games List") })
-                }, modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LazyColumn(modifier = Modifier.padding(innerPadding)) {
 
-                        items(IGDB.games){ game -> GameItem(game)}
-
-                    }
-                }
-
-             */
             }
         }
     }

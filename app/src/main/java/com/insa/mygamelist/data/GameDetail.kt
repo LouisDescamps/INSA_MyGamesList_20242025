@@ -25,7 +25,7 @@ fun GameDetail(navController: NavHostController, gameID: Long){
             ), title = { Text(IGDB.games.find { it.id==gameID }?.name?:"Unknown game") })
         }, modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-                Text(IGDB.games.find { it.id==gameID }?.name?:"Unknown game")
+                Text(gameID.toString())
 
 
         }

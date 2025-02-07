@@ -26,7 +26,11 @@ fun GameList(navController: NavHostController){
     }, modifier = Modifier.fillMaxSize()) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
 
-            //items(IGDB.games){ game -> GameItem(game)}
+            items(IGDB.games){
+                game -> GameItem(game){
+                    navController.navigate("gameDetail/${game.id}")
+                }
+            }
 
         }
     }

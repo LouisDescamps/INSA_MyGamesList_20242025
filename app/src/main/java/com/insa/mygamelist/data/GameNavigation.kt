@@ -14,12 +14,14 @@ object FriendsList
 
 @Composable
 fun GameNavigation(navController: NavHostController) {
-    val navController = rememberNavController()
-    NavHost(navController, startDestination = Profile) {
-        composable<Profile> { GameList(navController) }
-        composable<FriendsList> {
-            //onClick=navController.navigate(FriendsList...)
-            //GameDetail(navController,gameId)
+
+    NavHost(navController, startDestination = "profile") {
+        composable("profile") { GameList(navController) }
+
+        composable("gameDetail/{gameID}") { backStackEntry ->
+            val gameID = backStackEntry.arguments?.getString("gameID")?.toLongOrNull() ?: -1
+            GameDetail(navController, gameID)
         }
     }
 }
+
