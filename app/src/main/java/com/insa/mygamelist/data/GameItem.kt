@@ -22,6 +22,7 @@ import coil3.compose.AsyncImage
 
 @Composable
 fun GameItem(game: Game,onClick:()->Unit) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
