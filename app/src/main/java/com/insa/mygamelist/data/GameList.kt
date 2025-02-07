@@ -28,7 +28,7 @@ fun GameList(navController: NavHostController){
 
             items(IGDB.games){
                 game -> GameItem(game){
-                    navController.navigate("gameDetail/${game.id}")
+                    navController.navigate(gameitem(game.id))
                 }
             }
 

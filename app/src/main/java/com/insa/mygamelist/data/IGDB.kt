@@ -36,7 +36,7 @@ object IGDB {
 }
 
 data class Cover(val id: Long, val url: String)
-data class Game(val id: Long, val cover: Long, val first_release_date : Long, val genres: List<Long>, val name: String, val plateforms: List<Long>, val summary: String, val total_rating: Float)
+data class Game(val id: Long, val cover: Long, val first_release_date : Long, val genres: List<Long>, val name: String, val platforms: List<Long>, val summary: String, val total_rating: Float)
 data class Genre(val id: Long, val name: String)
 data class Platform_logos(val id: Long, val url: String)
-data class Platform(val id: Long, val name: String, val id_platform_logos : Long)
+data class Platform(val id: Long, val name: String, val platform_logo : Long)

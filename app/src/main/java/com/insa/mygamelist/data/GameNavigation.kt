@@ -5,22 +5,23 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 @Serializable
-object Profile
+object Home
 @Serializable
-object FriendsList
+data class gameitem(val id: Long)
 
 
 @Composable
 fun GameNavigation(navController: NavHostController) {
 
-    NavHost(navController, startDestination = "profile") {
-        composable("profile") { GameList(navController) }
+    NavHost(navController, startDestination = Home) {
+        composable<Home> { GameList(navController) }
 
-        composable("gameDetail/{gameID}") { backStackEntry ->
-            val gameID = backStackEntry.arguments?.getString("gameID")?.toLongOrNull() ?: -1
-            GameDetail(navController, gameID)
+        composable<gameitem> { backStackEntry ->
+            val item: gameitem = backStackEntry.toRoute()
+            GameDetail(navController, item.id)
         }
     }
 }
