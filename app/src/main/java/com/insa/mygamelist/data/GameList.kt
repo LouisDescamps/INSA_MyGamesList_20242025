@@ -10,28 +10,84 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.platform.LocalFocusManager
+
+
+var research : String = ""
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameList(navController: NavHostController){
+
+    var query by remember { mutableStateOf(research) }
+    var isSearchBarActive by remember { mutableStateOf(false) }
+    val filterGames = IGDB.games.filter { game ->
+        game.name.contains(query, ignoreCase = true) ||
+        (game.genres.mapNotNull { genreId -> IGDB.genres.find { it.id == genreId }?.name }).any { genre -> genre.contains(query, ignoreCase = true) } ||
+        (game.platforms.mapNotNull { platformId -> IGDB.platforms.find { it.id == platformId }?.name }).any { genre -> genre.contains(query, ignoreCase = true) }
+    }
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             TopAppBar(colors = topAppBarColors(
                 containerColor = Color.Magenta,
                 titleContentColor = Color.Black,
-                ), title = { Text("My Games List") })
-    }, modifier = Modifier.fillMaxSize()) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+                ), title = { Text("My Games List") }
+            )
 
-            items(IGDB.games){
-                game -> GameItem(game){
-                    navController.navigate(gameitem(game.id))
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            SearchBar(
+                inputField = {
+                    TextField(
+                        value = query,
+                        onValueChange = {
+                            query = it
+                            research =  it}, // Met à jour la recherche
+                        label = { Text("Rechercher un jeu") },
+                    )
+                },
+                expanded = isSearchBarActive, // Indique si la SearchBar est ouverte
+                onExpandedChange = { isSearchBarActive = it },
+                content = { Text("Tapez pour rechercher un jeu...") },
+                windowInsets = WindowInsets(0),
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
+            if (query.isNotEmpty() && filterGames.isEmpty()) {
+                LaunchedEffect(query) {
+                    focusManager.clearFocus()
+                    navController.navigate(NoResearch)
+                    research = ""
+                    query = ""
                 }
-            }
+            }else{
 
+                LazyColumn() {
+                    items(filterGames){
+                        game -> GameItem(game){
+                             navController.navigate(gameitem(game.id))
+                        }
+                    }
+                }
+
+            }
         }
     }
 }

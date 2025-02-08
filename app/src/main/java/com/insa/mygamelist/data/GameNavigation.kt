@@ -7,10 +7,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
+
+
 @Serializable
 object Home
 @Serializable
 data class gameitem(val id: Long)
+@Serializable
+object NoResearch
 
 
 @Composable
@@ -23,6 +27,7 @@ fun GameNavigation(navController: NavHostController) {
             val item: gameitem = backStackEntry.toRoute()
             GameDetail(navController, item.id)
         }
+        composable<NoResearch> { NoResearchAvailable(navController) }
     }
 }
 

@@ -43,7 +43,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 titleContentColor = Color.Black,
             ), title = { Text(game?.name?:"Unknown game") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigate(Home) }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 }
