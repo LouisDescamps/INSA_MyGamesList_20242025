@@ -17,8 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.ui.platform.LocalFocusManager
+import kotlinx.coroutines.launch
 
 
 var research : String = ""
@@ -28,7 +32,8 @@ var research : String = ""
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameList(navController: NavHostController){
-
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     var query by remember { mutableStateOf(research) }
     var isSearchBarActive by remember { mutableStateOf(false) }
     val filterGames = IGDB.games.filter { game ->
@@ -46,6 +51,17 @@ fun GameList(navController: NavHostController){
                 ), title = { Text("My Games List") }
             )
 
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    coroutineScope.launch { listState.animateScrollToItem(0) }  // 🔥 Remonte en haut
+                },
+                containerColor = Color.Magenta,
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Remonter en haut")
+            }
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -81,7 +97,7 @@ fun GameList(navController: NavHostController){
                 }
             }else{
 
-                LazyColumn() {
+                LazyColumn(state = listState) {
                     items(filterGames){
                         game -> GameItem(game){
                              navController.navigate(gameitem(game.id))
