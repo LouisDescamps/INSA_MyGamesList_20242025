@@ -31,12 +31,15 @@ import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.ui.platform.LocalContext
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameDetail(navController: NavHostController, gameID: Long) {
     val game = IGDB.games.find { it.id == gameID }
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(colors = topAppBarColors(
@@ -50,7 +53,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 },
                 actions = {
                     IconButton(
-                        onClick = { GameFavorite.toggleFavori(gameID) }
+                        onClick = { GameFavorite.toggleFavori(gameID, context) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Star,
