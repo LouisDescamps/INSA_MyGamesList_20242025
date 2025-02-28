@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.platform.LocalContext
 
+val gameRatings = mutableStateMapOf<Long, Float>()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +39,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
     val previousIndex = if (currentIndex > 0) currentIndex - 1 else games.lastIndex
     val nextIndex = if (currentIndex < games.lastIndex) currentIndex + 1 else 0
     val context = LocalContext.current
+
+    var showRatingDialog by remember { mutableStateOf(false) }
+    val gameRating = gameRatings[gameID] ?: 0f
 
     Scaffold(
         topBar = {
@@ -150,6 +154,46 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                     }
                 }
             }
+            item {
+                val formattedRating = String.format("%.1f", gameRating)
+                Button(
+                    onClick = { showRatingDialog = true },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                ) {
+                    Text(text = "Donner une note ($formattedRating/10)")
+                }
+            }
         }
+    }
+
+    // Boîte de dialogue pour la notation
+    if (showRatingDialog) {
+        AlertDialog(
+            onDismissRequest = { showRatingDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showRatingDialog = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Note du jeu") },
+            text = {
+                Column {
+                    var sliderValue by remember { mutableStateOf(gameRating) }
+                    Slider(
+                        value = sliderValue,
+                        onValueChange = { sliderValue = it },
+                        valueRange = 0f..10f,
+                        steps = 10
+                    )
+                    Text(text = "Note: ${String.format("%.1f", sliderValue)}")
+                    Button(onClick = {
+                        gameRatings[gameID] = sliderValue
+                        showRatingDialog = false
+                    }) {
+                        Text("Enregistrer")
+                    }
+                }
+            }
+        )
     }
 }

@@ -22,6 +22,7 @@ import coil3.compose.AsyncImage
 @Composable
 fun GameItem(game: Game,onClick:()->Unit) {
     val context = LocalContext.current
+    val gameRating = gameRatings[game.id] ?: 0f
 
     Box(
         modifier = Modifier
@@ -30,16 +31,28 @@ fun GameItem(game: Game,onClick:()->Unit) {
             .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
             .clickable { onClick() }
     ) {
-
-        IconButton(
-            onClick = { GameFavorite.toggleFavori(game.id, context) } ,
-            modifier = Modifier.align(Alignment.TopEnd)
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = "Favori",
-                tint = if (GameFavorite.isFavori(game.id)) Color.Yellow else Color.Gray,
+            Text(
+                text = String.format("%.1f", gameRating),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Black
             )
+
+
+            IconButton(
+                onClick = { GameFavorite.toggleFavori(game.id, context) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Favori",
+                    tint = if (GameFavorite.isFavori(game.id)) Color.Yellow else Color.Gray,
+                )
+            }
         }
         Row(
             modifier = Modifier
