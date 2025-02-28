@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.AlignmentLine
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -20,6 +21,7 @@ import coil3.compose.AsyncImage
 
 @Composable
 fun GameItem(game: Game,onClick:()->Unit) {
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -30,7 +32,7 @@ fun GameItem(game: Game,onClick:()->Unit) {
     ) {
 
         IconButton(
-            onClick = { GameFavorite.toggleFavori(game.id) } ,
+            onClick = { GameFavorite.toggleFavori(game.id, context) } ,
             modifier = Modifier.align(Alignment.TopEnd)
         ) {
             Icon(

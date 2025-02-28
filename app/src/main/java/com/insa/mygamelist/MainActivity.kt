@@ -21,10 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.insa.mygamelist.data.GameFavorite
 
 import com.insa.mygamelist.data.GameItem
 import com.insa.mygamelist.data.GameNavigation
 import com.insa.mygamelist.data.IGDB
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -35,11 +38,15 @@ class MainActivity : ComponentActivity() {
 
         IGDB.load(this)
 
+        MainScope().launch {
+            GameFavorite.initFavorites(this@MainActivity)
+        }
+
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             GameNavigation(navController)
 
-            }
         }
     }
+}

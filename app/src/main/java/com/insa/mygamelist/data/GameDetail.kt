@@ -23,6 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.ui.platform.LocalContext
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,26 +34,31 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
     val games = IGDB.games
     var currentIndex by remember { mutableStateOf(games.indexOfFirst { it.id == gameID }) }
     if (currentIndex == -1) return
-    val game = games[currentIndex]
+    val gameIndex = games[currentIndex]
     val previousIndex = if (currentIndex > 0) currentIndex - 1 else games.lastIndex
     val nextIndex = if (currentIndex < games.lastIndex) currentIndex + 1 else 0
+
+    val game = IGDB.games.find { it.id == gameID }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TopAppBar(
                 colors = topAppBarColors(containerColor = Color.Magenta, titleContentColor = Color.Black),
-                title = { Text(game.name) },
+                title = { Text(gameIndex.name) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = { GameFavorite.toggleFavori(game.id) }) {
+                    IconButton(
+                        onClick = { GameFavorite.toggleFavori(gameID, context) }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = "Favori",
-                            tint = if (GameFavorite.isFavori(game.id)) Color.Yellow else Color.Gray
+                            tint = if (GameFavorite.isFavori(gameID)) Color.Yellow else Color.Gray
                         )
                     }
                 }
@@ -68,7 +77,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
         ) {
             item {
                 Text(
-                    text = game.name,
+                    text = gameIndex.name,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline,
@@ -79,7 +88,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
 
             item {
                 AsyncImage(
-                    model = "https:" + getCoverUrl(game.cover),
+                    model = "https:" + getCoverUrl(gameIndex.cover),
                     contentDescription = "Game Cover",
                     modifier = Modifier.fillMaxWidth().size(250.dp),
                     contentScale = ContentScale.Fit,
@@ -87,7 +96,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
             }
 
             item {
-                val genreNames = game.genres.mapNotNull { id -> IGDB.genres.find { it.id == id }?.name }
+                val genreNames = gameIndex.genres.mapNotNull { id -> IGDB.genres.find { it.id == id }?.name }
                 Text(
                     text = genreNames.joinToString(", "),
                     style = MaterialTheme.typography.bodySmall,
@@ -99,13 +108,13 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
             }
 
             // Liste horizontale des plateformes
-            if (game.platforms.isNotEmpty()) {
+            if (gameIndex.platforms.isNotEmpty()) {
                 item {
                     LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(game.platforms) { platformId ->
+                        items(gameIndex.platforms) { platformId ->
                             val platform = IGDB.platforms.find { it.id == platformId }
                             val logoUrl = IGDB.platform_logos.find { it.id == platform?.platform_logo }?.url
                             if (logoUrl != null) {
@@ -122,7 +131,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
 
             item {
                 Text(
-                    text = game.summary,
+                    text = gameIndex.summary,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
