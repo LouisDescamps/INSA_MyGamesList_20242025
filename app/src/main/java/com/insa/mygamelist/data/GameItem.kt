@@ -23,7 +23,7 @@ import coil3.compose.AsyncImage
 fun GameItem(game: Game,onClick:()->Unit) {
     val context = LocalContext.current
     val gameRating = gameRatings[game.id] ?: 0f
-
+    val ratingText = if (gameRating == 0f) "Unrated" else String.format("%.1f", gameRating)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,7 +38,7 @@ fun GameItem(game: Game,onClick:()->Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = String.format("%.1f", gameRating),
+                text = ratingText,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Black
             )

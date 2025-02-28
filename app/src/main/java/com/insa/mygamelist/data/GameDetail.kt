@@ -92,7 +92,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 AsyncImage(
                     model = "https:" + getCoverUrl(gameIndex.cover),
                     contentDescription = "Game Cover",
-                    modifier = Modifier.fillMaxWidth().size(250.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(250.dp),
                     contentScale = ContentScale.Fit,
                 )
             }
@@ -123,7 +125,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                                 AsyncImage(
                                     model = "https:$logoUrl",
                                     contentDescription = platform?.name,
-                                    modifier = Modifier.size(80.dp).padding(horizontal = 8.dp)
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .padding(horizontal = 8.dp)
                                 )
                             }
                         }
@@ -142,7 +146,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
             // Boutons "Précédent" et "Suivant"
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(onClick = { currentIndex = previousIndex }) {
@@ -158,9 +164,11 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 val formattedRating = String.format("%.1f", gameRating)
                 Button(
                     onClick = { showRatingDialog = true },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
-                    Text(text = "Donner une note ($formattedRating/10)")
+                    Text(text = "Give me a rating ($formattedRating/10)")
                 }
             }
         }
@@ -175,7 +183,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                     Text("OK")
                 }
             },
-            title = { Text("Note du jeu") },
+            title = { Text("Game rating") },
             text = {
                 Column {
                     var sliderValue by remember { mutableStateOf(gameRating) }
@@ -185,12 +193,12 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                         valueRange = 0f..10f,
                         steps = 10
                     )
-                    Text(text = "Note: ${String.format("%.1f", sliderValue)}")
+                    Text(text = "Rating: ${String.format("%.1f", sliderValue)}")
                     Button(onClick = {
                         gameRatings[gameID] = sliderValue
                         showRatingDialog = false
                     }) {
-                        Text("Enregistrer")
+                        Text("Save")
                     }
                 }
             }
