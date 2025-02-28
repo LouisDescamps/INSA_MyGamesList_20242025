@@ -37,8 +37,6 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
     val gameIndex = games[currentIndex]
     val previousIndex = if (currentIndex > 0) currentIndex - 1 else games.lastIndex
     val nextIndex = if (currentIndex < games.lastIndex) currentIndex + 1 else 0
-
-    val game = IGDB.games.find { it.id == gameID }
     val context = LocalContext.current
 
     Scaffold(
