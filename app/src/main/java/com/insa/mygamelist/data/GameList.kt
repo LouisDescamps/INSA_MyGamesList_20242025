@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 
 var research : String = ""
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameList(navController: NavHostController){

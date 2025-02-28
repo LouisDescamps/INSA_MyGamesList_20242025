@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Star
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,10 +47,23 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                     IconButton(onClick = { navController.navigate(Home) }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { GameFavorite.toggleFavori(gameID) }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Favori",
+                            tint = if (GameFavorite.isFavori(gameID)) Color.Yellow else Color.Gray
+                        )
+                    }
                 }
+
             )
+
         },
-        modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
