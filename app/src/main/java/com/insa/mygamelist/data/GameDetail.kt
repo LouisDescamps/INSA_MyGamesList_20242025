@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.platform.LocalContext
 
+val gameRatings = mutableStateMapOf<Long, Float>()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,9 +38,10 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
     val gameIndex = games[currentIndex]
     val previousIndex = if (currentIndex > 0) currentIndex - 1 else games.lastIndex
     val nextIndex = if (currentIndex < games.lastIndex) currentIndex + 1 else 0
-
-    val game = IGDB.games.find { it.id == gameID }
     val context = LocalContext.current
+
+    var showRatingDialog by remember { mutableStateOf(false) }
+    val gameRating = gameRatings[gameID] ?: 0f
 
     Scaffold(
         topBar = {
@@ -90,7 +92,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 AsyncImage(
                     model = "https:" + getCoverUrl(gameIndex.cover),
                     contentDescription = "Game Cover",
-                    modifier = Modifier.fillMaxWidth().size(250.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(250.dp),
                     contentScale = ContentScale.Fit,
                 )
             }
@@ -121,7 +125,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                                 AsyncImage(
                                     model = "https:$logoUrl",
                                     contentDescription = platform?.name,
-                                    modifier = Modifier.size(80.dp).padding(horizontal = 8.dp)
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .padding(horizontal = 8.dp)
                                 )
                             }
                         }
@@ -140,7 +146,9 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
             // Boutons "Précédent" et "Suivant"
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(onClick = { currentIndex = previousIndex }) {
@@ -152,6 +160,48 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                     }
                 }
             }
+            item {
+                val formattedRating = String.format("%.1f", gameRating)
+                Button(
+                    onClick = { showRatingDialog = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(text = "Give me a rating ($formattedRating/10)")
+                }
+            }
         }
+    }
+
+    // Boîte de dialogue pour la notation
+    if (showRatingDialog) {
+        AlertDialog(
+            onDismissRequest = { showRatingDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showRatingDialog = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Game rating") },
+            text = {
+                Column {
+                    var sliderValue by remember { mutableStateOf(gameRating) }
+                    Slider(
+                        value = sliderValue,
+                        onValueChange = { sliderValue = it },
+                        valueRange = 0f..10f,
+                        steps = 10
+                    )
+                    Text(text = "Rating: ${String.format("%.1f", sliderValue)}")
+                    Button(onClick = {
+                        gameRatings[gameID] = sliderValue
+                        showRatingDialog = false
+                    }) {
+                        Text("Save")
+                    }
+                }
+            }
+        )
     }
 }

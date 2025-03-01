@@ -32,6 +32,9 @@ fun GameItem(game : Game,onClick:()->Unit) {
     val context = LocalContext.current
     var isDialogVisible by remember { mutableStateOf(false) }
 
+    val gameRating = gameRatings[game.id] ?: 0f
+    val ratingText = if (gameRating == 0f) "Unrated" else String.format("%.1f", gameRating)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,16 +45,28 @@ fun GameItem(game : Game,onClick:()->Unit) {
                 onLongClick = { isDialogVisible = true }
             )
     ) {
-
-        IconButton(
-            onClick = { GameFavorite.toggleFavori(game.id, context) } ,
-            modifier = Modifier.align(Alignment.TopEnd)
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = "Favori",
-                tint = if (GameFavorite.isFavori(game.id)) Color.Yellow else Color.Gray,
+            Text(
+                text = ratingText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Black
             )
+
+
+            IconButton(
+                onClick = { GameFavorite.toggleFavori(game.id, context) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Favori",
+                    tint = if (GameFavorite.isFavori(game.id)) Color.Yellow else Color.Gray,
+                )
+            }
         }
         Row(
             modifier = Modifier

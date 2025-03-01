@@ -19,12 +19,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -35,9 +44,11 @@ import androidx.compose.ui.window.Dialog
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
+import kotlinx.coroutines.launch
 
 
 var research : String = ""
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +57,8 @@ fun GameList(navController: NavHostController){
     var isRefreshing by remember { mutableStateOf(false) }
     var isDialogVisible by remember { mutableStateOf(false) }
 
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     var query by remember { mutableStateOf(research) }
     var isSearchBarActive by remember { mutableStateOf(false) }
     val filterGames = IGDB.games.filter { game ->
@@ -70,6 +83,17 @@ fun GameList(navController: NavHostController){
                 ), title = { Text("My Games List") }
             )
 
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    coroutineScope.launch { listState.animateScrollToItem(0) }  // 🔥 Remonte en haut
+                },
+                containerColor = Color.Magenta,
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Remonter en haut")
+            }
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -113,7 +137,7 @@ fun GameList(navController: NavHostController){
                     },
                     modifier = Modifier.fillMaxSize()
                 ){
-                    LazyColumn() {
+                    LazyColumn(state = listState) {
                         items(DeletedManagement.displayedGames){
                             game -> GameItem(game){
                                 navController.navigate(gameitem(game.id))
@@ -160,7 +184,6 @@ fun DisplayRefreshPopup(onDismiss: () -> Unit){
                     Text("Reload all deleted games", color = Color.Black)
                 }
             }
-
         }
     }
 }
