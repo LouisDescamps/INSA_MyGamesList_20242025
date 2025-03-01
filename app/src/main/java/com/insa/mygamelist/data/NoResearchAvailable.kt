@@ -26,7 +26,7 @@ fun NoResearchAvailable(navController: NavHostController){
         IconButton(onClick = {
             navController.navigateUp()
         }) {
-            Icon(Icons.Filled.Star, contentDescription = "Back")
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
         }
 
         Text(

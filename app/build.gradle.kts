@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.28.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

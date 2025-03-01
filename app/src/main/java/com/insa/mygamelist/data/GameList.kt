@@ -1,5 +1,7 @@
 package com.insa.mygamelist.data
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,17 +19,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+
 
 
 var research : String = ""
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameList(navController: NavHostController){
+    var isRefreshing by remember { mutableStateOf(false) }
+    var isDialogVisible by remember { mutableStateOf(false) }
 
     var query by remember { mutableStateOf(research) }
     var isSearchBarActive by remember { mutableStateOf(false) }
@@ -37,6 +54,13 @@ fun GameList(navController: NavHostController){
         (game.platforms.mapNotNull { platformId -> IGDB.platforms.find { it.id == platformId }?.name }).any { genre -> genre.contains(query, ignoreCase = true) }
     }
     val focusManager = LocalFocusManager.current
+
+    DeletedManagement.displayedGames.clear()
+    filterGames.map { game -> DeletedManagement.displayedGames.add(game) }
+    DeletedManagement.deletedGames.map { game -> if(DeletedManagement.displayedGames.contains(game)) DeletedManagement.displayedGames.remove(game) }
+
+
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     Scaffold(
         topBar = {
@@ -72,7 +96,7 @@ fun GameList(navController: NavHostController){
                     .fillMaxWidth()
             )
 
-            if (query.isNotEmpty() && filterGames.isEmpty()) {
+            if (query.isNotEmpty() && DeletedManagement.displayedGames.isEmpty()) {
                 LaunchedEffect(query) {
                     focusManager.clearFocus()
                     navController.navigate(NoResearch)
@@ -80,16 +104,63 @@ fun GameList(navController: NavHostController){
                     query = ""
                 }
             }else{
-
-                LazyColumn() {
-                    items(filterGames){
-                        game -> GameItem(game){
-                             navController.navigate(gameitem(game.id))
+                SwipeRefresh(
+                    state = swipeRefreshState,
+                    onRefresh = {
+                        isRefreshing = true
+                        isDialogVisible = true
+                        isRefreshing = false
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    LazyColumn() {
+                        items(DeletedManagement.displayedGames){
+                            game -> GameItem(game){
+                                navController.navigate(gameitem(game.id))
+                            }
                         }
                     }
                 }
-
             }
+        }
+    }
+    if (isDialogVisible) {
+        DisplayRefreshPopup(
+            onDismiss = { isDialogVisible = false }
+        )
+    }
+}
+
+@Composable
+fun DisplayRefreshPopup(onDismiss: () -> Unit){
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable {
+                            DeletedManagement.reloadAll();  //on remet toutes les games qui avaient été supprimées
+                            onDismiss() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Supprimer",
+                        tint = Color.Magenta
+                    )
+                    Text("Reload all deleted games", color = Color.Black)
+                }
+            }
+
         }
     }
 }
