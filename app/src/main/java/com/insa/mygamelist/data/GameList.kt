@@ -55,7 +55,7 @@ fun GameList(navController: NavHostController){
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    coroutineScope.launch { listState.animateScrollToItem(0) }  // 🔥 Remonte en haut
+                    coroutineScope.launch { listState.animateScrollToItem(0) }
                 },
                 containerColor = Color.Magenta,
                 contentColor = Color.White
