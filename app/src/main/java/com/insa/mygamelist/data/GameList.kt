@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalFocusManager
@@ -69,12 +70,18 @@ fun GameList(navController: NavHostController){
 
     Scaffold(
         topBar = {
-            TopAppBar(colors = topAppBarColors(
-                containerColor = Color.Magenta,
-                titleContentColor = Color.Black,
-                ), title = { Text("My Games List") }
+            TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = Color.Magenta,
+                    titleContentColor = Color.Black,
+                ),
+                title = { Text("My Games List") },
+                actions = {
+                    IconButton(onClick = { navController.navigate(Profile) }) {
+                        Icon(Icons.Default.AccountCircle, contentDescription = "Profil Personnel")
+                    }
+                }
             )
-
         },
         floatingActionButton = {
             FloatingActionButton(

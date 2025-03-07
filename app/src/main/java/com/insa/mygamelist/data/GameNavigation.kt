@@ -15,7 +15,8 @@ object Home
 data class gameitem(val id: Long)
 @Serializable
 object NoResearch
-
+@Serializable
+object Profile
 
 @Composable
 fun GameNavigation(navController: NavHostController) {
@@ -28,6 +29,7 @@ fun GameNavigation(navController: NavHostController) {
             GameDetail(navController, item.id)
         }
         composable<NoResearch> { NoResearchAvailable(navController) }
+        composable<Profile> { PersonalProfile(navController) }
     }
 }
 
