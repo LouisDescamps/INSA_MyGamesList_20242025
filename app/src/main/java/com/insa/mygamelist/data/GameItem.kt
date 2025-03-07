@@ -32,7 +32,7 @@ fun GameItem(game : Game,onClick:()->Unit) {
     val context = LocalContext.current
     var isDialogVisible by remember { mutableStateOf(false) }
 
-    val gameRating = gameRatings[game.id] ?: 0f
+    val gameRating by remember { mutableStateOf(RatingStorage.getRating(context, game.id)) }
     val ratingText = if (gameRating == 0f) "Unrated" else String.format("%.1f", gameRating)
 
     Box(

@@ -25,7 +25,13 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -73,7 +79,7 @@ fun GameList(navController: NavHostController){
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    coroutineScope.launch { listState.animateScrollToItem(0) }  // 🔥 Remonte en haut
+                    coroutineScope.launch { listState.animateScrollToItem(0) }  // Remonte en haut
                 },
                 containerColor = Color.Magenta,
                 contentColor = Color.White
@@ -113,7 +119,36 @@ fun GameList(navController: NavHostController){
                     research = ""
                     query = ""
                 }
-            }else{
+            }
+            else if (query.isEmpty() && DeletedManagement.displayedGames.isEmpty()){   //cas où on a tout supprimé
+                SwipeRefresh(
+                    state = swipeRefreshState,
+                    onRefresh = {
+                        isRefreshing = true
+                        isDialogVisible = true
+                        isRefreshing = false
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillParentMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "All games have been deleted, try to refresh !",
+                                    color = Color.Black,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            else{
                 SwipeRefresh(
                     state = swipeRefreshState,
                     onRefresh = {

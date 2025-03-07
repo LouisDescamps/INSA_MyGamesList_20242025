@@ -9,7 +9,7 @@ object GameFavorite {
     val favoris = mutableStateListOf<Long>()
 
     suspend fun initFavorites(context: Context) {
-        val savedFavorites = getFavorites(context)
+        val savedFavorites = FavoriteStorage.getFavorites(context)
         favoris.clear()
         favoris.addAll(savedFavorites.map { it.toLong() })
     }
@@ -24,7 +24,7 @@ object GameFavorite {
 
         // On met à jour la liste de favoris dans le DataStore
         CoroutineScope(Dispatchers.IO).launch {
-            saveFavorites(context, favoris.map { it.toString() }.toSet())
+            FavoriteStorage.saveFavorites(context, favoris.map { it.toString() }.toSet())
         }
     }
 

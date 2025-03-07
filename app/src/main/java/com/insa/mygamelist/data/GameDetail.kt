@@ -39,7 +39,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
     val context = LocalContext.current
 
     var showRatingDialog by remember { mutableStateOf(false) }
-    val gameRating = gameRatings[gameID] ?: 0f
+    var gameRating by remember { mutableStateOf(RatingStorage.getRating(context, gameID)) }
 
     Scaffold(
         topBar = {
@@ -194,6 +194,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                     Text(text = "Rating: ${String.format("%.1f", sliderValue)}")
                     Button(onClick = {
                         gameRatings[gameID] = sliderValue
+                        RatingStorage.saveRating(context, gameID, sliderValue)
                         showRatingDialog = false
                     }) {
                         Text("Save")
