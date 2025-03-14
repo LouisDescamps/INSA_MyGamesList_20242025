@@ -45,8 +45,8 @@ fun authenticateUser(
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Authentification requise")
             .setSubtitle("Déverrouillez pour accéder à l'application")
-            // Suppression de la ligne setNegativeButtonText ici
-            .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+            //.setNegativeButtonText("Annuler")
+            .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
             .build()
 
         biometricPrompt.authenticate(promptInfo)
