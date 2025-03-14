@@ -1,7 +1,5 @@
 package com.insa.mygamelist.data
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,23 +10,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil3.compose.AsyncImage
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.window.Dialog
 import com.insa.mygamelist.R
-import com.insa.mygamelist.data.FavoriteStorage.getFavorites
-import com.insa.mygamelist.data.GameFavorite.favoris
-import com.insa.mygamelist.data.NameStorage.getName
 import com.insa.mygamelist.data.NameStorage.saveName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +22,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonalProfile(navController: NavHostController) {
+fun PersonalProfile(navController: NavHostController) {     //Page de prifil personnel
     var isDialogVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
     Scaffold(
@@ -84,7 +69,7 @@ fun PersonalProfile(navController: NavHostController) {
 
             Text(text = "Favorite Games")
 
-            LazyColumn {
+            LazyColumn {  //Affichage des jeux mis en favoris
                 items(GameFavorite.favoris) { game ->
                     GameItem(game = IGDB.games.find  { it.id == game }?:IGDB.games[0]  , onClick = {
                             navController.navigate(gameitem(game))
@@ -105,7 +90,7 @@ fun PersonalProfile(navController: NavHostController) {
                 }
             },
             text = {
-                TextField(
+                TextField(          //Possibilité de changer le nom (persistant)
                     value = ProfileName.profile_name.value,
                     onValueChange = { newName ->
                         ProfileName.profile_name.value = newName

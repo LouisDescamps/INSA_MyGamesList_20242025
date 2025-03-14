@@ -2,7 +2,7 @@ package com.insa.mygamelist.data
 
 import android.content.Context
 
-object RatingStorage{
+object RatingStorage{  //Stockage des notes pour la persistance
     private const val PREFS_NAME = "game_ratings_prefs"
     private const val RATING_PREFIX = "rating_"
 

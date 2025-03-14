@@ -28,12 +28,6 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -47,27 +41,27 @@ var research : String = ""
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameList(navController: NavHostController){
+fun GameList(navController: NavHostController){                 //Page principale
     var isRefreshing by remember { mutableStateOf(false) }
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
+
     var isDialogVisible by remember { mutableStateOf(false) }
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
     var query by remember { mutableStateOf(research) }
     var isSearchBarActive by remember { mutableStateOf(false) }
-    val filterGames = IGDB.games.filter { game ->
+    val filterGames = IGDB.games.filter { game ->  //Filtre pour la recherche selon les attendus du TP
         game.name.contains(query, ignoreCase = true) ||
         (game.genres.mapNotNull { genreId -> IGDB.genres.find { it.id == genreId }?.name }).any { genre -> genre.contains(query, ignoreCase = true) } ||
         (game.platforms.mapNotNull { platformId -> IGDB.platforms.find { it.id == platformId }?.name }).any { genre -> genre.contains(query, ignoreCase = true) }
     }
-    val focusManager = LocalFocusManager.current
 
-    DeletedManagement.displayedGames.clear()
+    DeletedManagement.displayedGames.clear()  //On affiche seulement les jeux qui ne sont pas dans la liste des supprimés
     filterGames.map { game -> DeletedManagement.displayedGames.add(game) }
     DeletedManagement.deletedGames.map { game -> if(DeletedManagement.displayedGames.contains(game)) DeletedManagement.displayedGames.remove(game) }
 
-
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     Scaffold(
         topBar = {
@@ -84,10 +78,10 @@ fun GameList(navController: NavHostController){
                 }
             )
         },
-        floatingActionButton = {
+        floatingActionButton = {   // Boutton pour remonter en haut
             FloatingActionButton(
                 onClick = {
-                    coroutineScope.launch { listState.animateScrollToItem(0) }  // Remonte en haut
+                    coroutineScope.launch { listState.animateScrollToItem(0) }
                 },
                 containerColor = Color.Magenta,
                 contentColor = Color.White
@@ -107,7 +101,7 @@ fun GameList(navController: NavHostController){
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ){
-                        TextField(
+                        TextField(              //Barre de recherche
                             value = query,
                             onValueChange = {
                                 query = it
@@ -128,7 +122,7 @@ fun GameList(navController: NavHostController){
                                 }
 
                                 if (filteredGames.isEmpty()) {
-                                    navController.navigate(NoResearch)
+                                    navController.navigate(NoResearch)  //Redirection vers la page si aucun jeu n'est trouvé avec la recherche
                                     research = ""
                                     query = ""
                                 } else {
@@ -153,17 +147,7 @@ fun GameList(navController: NavHostController){
                 modifier = Modifier
                     .fillMaxWidth()
             )
-            /*
-            if (query.isNotEmpty() && DeletedManagement.displayedGames.isEmpty()) {
-                LaunchedEffect(query) {
-                    focusManager.clearFocus()
-                    navController.navigate(NoResearch)
-                    research = ""
-                    query = ""
-                }
-            }
 
-            */
             if (query.isEmpty() && DeletedManagement.displayedGames.isEmpty()){   //cas où on a tout supprimé
                 SwipeRefresh(
                     state = swipeRefreshState,
@@ -193,7 +177,7 @@ fun GameList(navController: NavHostController){
                 }
             }
             else{
-                SwipeRefresh(
+                SwipeRefresh(   //Refresh pour afficher la popup pour reload les jeux supprimes (ne le sont plus donc ensuite)
                     state = swipeRefreshState,
                     onRefresh = {
                         isRefreshing = true

@@ -1,9 +1,25 @@
-Fonctionnes supplémentaires:
-1. Swiper entre les jeux: 2 boutons flèche -> et <- en bas du page pour aller au jeu précédent/suivant
-2. Mise en favori survivant à la fermeture de l’app
-3. Changement de l'icône de l'app.
-4. Une icône rose en bas à droite de la liste des jeux pour remonter tout en haut.
-5. Possibilité de supprimer un jeu en restant appuyé dessus
-6. Une bouton en bas du détail du jeu pour noter le jeu, qui affiche également à côté de l'étoile de favori dans la liste des jeux.
-7. possibilité de ré-afficher les jeux qui ont été supprimés en faisant un refresh
-8. Navigation à la page de profile en touchant sur bouton en haut à droite de la liste de jeux, y compris l'avatar, nom d'utilisateur modifiable et la liste de favoris interactive
+Toutes les fonctionnalités des TP ont (normalement) été implémentées.
+
+Fonctionnalités supplémentaires:
+
+1. Possibilité de passer d'un jeu à un autre quand on est sur les détails d'un jeu. On peut passer au
+précédent ou au suivant et la logique est bien circulaire.
+
+2. Changement de l'icône de l'app.
+
+3. La mise en favoris des jeux est persistante.
+
+4. Ajout d'un bouton flottant en bas à droite de la page principale pour remonter en haut de celle-ci.
+
+5. Quand on reste appuyé sur un jeu parmi la liste de jeux (page principale), une popup apparait et nous
+propose via un bouton de supprimer le jeu de la liste (cas géré si on supprime tous les jeux).
+
+6. Lorsqu'on remonte plus haut que la page, on déclenche un refresh qui affiche une popup qui nous propose
+via un boutton de réafficher les jeux qui ont été supprimé.
+
+7. Ajout d'un slider dans les détails du jeu pour donner une note sur 10 à celui-ci. La note est affichée
+dans la liste des jeux à côté du logo des favoris et est persistante.
+
+8. Ajout d'un bouton en haut à droite de la page principale pour accéder à une page "profil utilisateur"
+qui comprend : Un logo // un nom/pseudo modifiable et persistant // un affichage des jeux mis en favoris
+(si on l'enlève des favoris depuis le profil, il disparait de cette liste)

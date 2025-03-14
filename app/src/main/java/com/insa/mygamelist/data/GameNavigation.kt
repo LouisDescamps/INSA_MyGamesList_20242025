@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
@@ -19,7 +18,7 @@ object NoResearch
 object Profile
 
 @Composable
-fun GameNavigation(navController: NavHostController) {
+fun GameNavigation(navController: NavHostController) {  //Def de la navigation entre les ecrans
 
     NavHost(navController, startDestination = Home) {
         composable<Home> { GameList(navController) }

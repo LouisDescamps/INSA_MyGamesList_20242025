@@ -29,24 +29,26 @@ val gameRatings = mutableStateMapOf<Long, Float>()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameDetail(navController: NavHostController, gameID: Long) {
+fun GameDetail(navController: NavHostController, gameID: Long) {  //Details d'un jeu quand on clique dessus
     val games = IGDB.games
+
     var currentIndex by remember { mutableStateOf(games.indexOfFirst { it.id == gameID }) }
     if (currentIndex == -1) return
     val gameIndex = games[currentIndex]
     val previousIndex = if (currentIndex > 0) currentIndex - 1 else games.lastIndex
     val nextIndex = if (currentIndex < games.lastIndex) currentIndex + 1 else 0
+
     val context = LocalContext.current
 
     var showRatingDialog by remember { mutableStateOf(false) }
-    var gameRating by remember { mutableStateOf(RatingStorage.getRating(context, gameID)) }
+    val gameRating by remember { mutableStateOf(RatingStorage.getRating(context, gameID)) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 colors = topAppBarColors(containerColor = Color.Magenta, titleContentColor = Color.Black),
                 title = { Text(gameIndex.name) },
-                navigationIcon = {
+                navigationIcon = {              //Retour page principale
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
@@ -66,16 +68,13 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        var offsetX by remember { mutableStateOf(0f) }
-        var offsetY by remember { mutableStateOf(0f) }
-
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
+            item { //Nom jeu
                 Text(
                     text = gameIndex.name,
                     modifier = Modifier.fillMaxWidth(),
@@ -86,7 +85,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 )
             }
 
-            item {
+            item { //Image jeu
                 AsyncImage(
                     model = "https:" + getCoverUrl(gameIndex.cover),
                     contentDescription = "Game Cover",
@@ -97,7 +96,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 )
             }
 
-            item {
+            item { //Liste genres
                 val genreNames = gameIndex.genres.mapNotNull { id -> IGDB.genres.find { it.id == id }?.name }
                 Text(
                     text = genreNames.joinToString(", "),
@@ -133,7 +132,7 @@ fun GameDetail(navController: NavHostController, gameID: Long) {
                 }
             }
 
-            item {
+            item { //Resume jeu
                 Text(
                     text = gameIndex.summary,
                     style = MaterialTheme.typography.bodyLarge,

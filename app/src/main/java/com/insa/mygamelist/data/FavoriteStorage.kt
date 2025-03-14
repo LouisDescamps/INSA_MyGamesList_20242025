@@ -7,7 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 
 
-object FavoriteStorage {
+object FavoriteStorage {   //Stockage des jeux favoris pour la persistance
     private val Context.dataStore by preferencesDataStore(name = "favorites_prefs")
     private val FAVORITES_KEY = stringSetPreferencesKey("favorites")
 

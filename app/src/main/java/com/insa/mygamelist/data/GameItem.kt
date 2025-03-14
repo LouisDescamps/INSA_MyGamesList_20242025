@@ -28,8 +28,9 @@ import androidx.compose.ui.window.Dialog
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GameItem(game : Game,onClick:()->Unit) {
+fun GameItem(game : Game,onClick:()->Unit) {  //Un block de la page d'accueil (un jeu)
     val context = LocalContext.current
+
     var isDialogVisible by remember { mutableStateOf(false) }
 
     val gameRating by remember { mutableStateOf(RatingStorage.getRating(context, game.id)) }
@@ -51,7 +52,7 @@ fun GameItem(game : Game,onClick:()->Unit) {
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            Text(  //Note
                 text = ratingText,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Black
@@ -61,7 +62,7 @@ fun GameItem(game : Game,onClick:()->Unit) {
             IconButton(
                 onClick = { GameFavorite.toggleFavori(game.id, context) }
             ) {
-                Icon(
+                Icon(  //Etoile pour mettre/enlever des favoris
                     imageVector = Icons.Default.Star,
                     contentDescription = "Favori",
                     tint = if (GameFavorite.isFavori(game.id)) Color.Yellow else Color.Gray,
@@ -76,13 +77,12 @@ fun GameItem(game : Game,onClick:()->Unit) {
         ) {
 
 
-            AsyncImage(
+            AsyncImage(  //Image jeu
                 model = "https:" + getCoverUrl(game.cover),
                 contentDescription = "Game Cover",
                 modifier = Modifier
                     .size(100.dp)
                     .padding(8.dp)
-
             )
 
             Column(
@@ -91,7 +91,7 @@ fun GameItem(game : Game,onClick:()->Unit) {
                     .align(Alignment.CenterVertically)
             ) {
 
-                Text(
+                Text(  //Nom du jeu
                     text = game.name,
                     style = TextStyle(fontWeight = FontWeight.Bold,  textDecoration = TextDecoration.Underline),
                     color = Color.Black
@@ -100,7 +100,7 @@ fun GameItem(game : Game,onClick:()->Unit) {
                 Spacer(modifier = Modifier.height(4.dp))
                 val genreNames =
                     game.genres.mapNotNull { id -> IGDB.genres.find { it.id == id }?.name }
-                Text(
+                Text(                   //Liste des genres
                     text = "Genres: ${genreNames.joinToString(", ")}",
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
@@ -110,7 +110,7 @@ fun GameItem(game : Game,onClick:()->Unit) {
         }
     }
 
-    // Affichage de la popup si appuie long sur un jeu
+    // Affichage de la popup si appui long sur un jeu
     if (isDialogVisible) {
         Dialog(
             onDismissRequest = { isDialogVisible = false }
@@ -125,10 +125,10 @@ fun GameItem(game : Game,onClick:()->Unit) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Row(
-                        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .clickable {
-                                DeletedManagement.deleteGame(game)
+                                DeletedManagement.deleteGame(game)  //Suppression du jeu
                                 isDialogVisible = false
                             }
                     ) {

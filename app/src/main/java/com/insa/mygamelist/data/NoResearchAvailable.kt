@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun NoResearchAvailable(navController: NavHostController){
+fun NoResearchAvailable(navController: NavHostController){  //Page quand aucun jeu ne correspond a la recherche
     Box(
         modifier = Modifier
             .fillMaxSize()

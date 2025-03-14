@@ -3,12 +3,11 @@ package com.insa.mygamelist.data
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 
 
-object NameStorage {
+object NameStorage {   //Stockage du nom de profil pour la persistance
     private val Context.dataStore by preferencesDataStore(name = "profile_name")
     private val NAME_KEY = stringPreferencesKey("name")
 

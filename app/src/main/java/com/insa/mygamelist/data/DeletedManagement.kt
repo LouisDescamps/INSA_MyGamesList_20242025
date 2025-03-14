@@ -2,7 +2,7 @@ package com.insa.mygamelist.data
 
 import androidx.compose.runtime.mutableStateListOf
 
-object DeletedManagement {
+object DeletedManagement {  //Gérer les jeux qui sont supprimés
     var deletedGames = mutableStateListOf<Game>()
     var displayedGames = mutableStateListOf<Game>()
 
@@ -12,7 +12,7 @@ object DeletedManagement {
         deletedGames.add(game)     //On l'ajoute dans les jeux supprimés
     }
 
-    fun reloadAll(){
+    fun reloadAll(){  //Lorsqu'on les reload, il n'y en a plus de supprimés et ils sont tous affichés
         deletedGames.map { game -> if(!displayedGames.contains(game)) displayedGames.add(game)}
         deletedGames.clear()
     }

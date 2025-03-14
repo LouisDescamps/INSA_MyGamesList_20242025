@@ -2,7 +2,7 @@ package com.insa.mygamelist.data
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 
-object ProfileName {
+object ProfileName {   //Objet global pour le nom de profil
     var profile_name = mutableStateOf("")
 
     suspend fun initProfileName(context: Context) {

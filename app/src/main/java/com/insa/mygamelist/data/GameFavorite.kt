@@ -5,17 +5,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.content.Context
 
-object GameFavorite {
+object GameFavorite {  //Gerer les jeux mis en favoris
     val favoris = mutableStateListOf<Long>()
 
-    suspend fun initFavorites(context: Context) {
+    suspend fun initFavorites(context: Context) {   //Réucup des favoris enregistrés
         val savedFavorites = FavoriteStorage.getFavorites(context)
         favoris.clear()
         favoris.addAll(savedFavorites.map { it.toLong() })
     }
 
 
-    fun toggleFavori(gameId: Long, context: Context) {
+    fun toggleFavori(gameId: Long, context: Context) { //Switch lorsqu'on clique sur l'étoile pour mettre ou enlever des favoris
         if (favoris.contains(gameId)) {
             favoris.remove(gameId)
         } else {
