@@ -26,6 +26,7 @@ import com.insa.mygamelist.data.GameFavorite
 import com.insa.mygamelist.data.GameItem
 import com.insa.mygamelist.data.GameNavigation
 import com.insa.mygamelist.data.IGDB
+import com.insa.mygamelist.data.ProfileName
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
         IGDB.load(this)
 
         MainScope().launch {
-            GameFavorite.initFavorites(this@MainActivity)
+            GameFavorite.initFavorites(this@MainActivity)  //init des favoris enregistrés
+            ProfileName.initProfileName(this@MainActivity)  //init du nom enregistré
         }
 
         enableEdgeToEdge()
