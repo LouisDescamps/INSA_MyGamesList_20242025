@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalFocusManager
@@ -103,13 +104,47 @@ fun GameList(navController: NavHostController){
         ) {
             SearchBar(
                 inputField = {
-                    TextField(
-                        value = query,
-                        onValueChange = {
-                            query = it
-                            research =  it}, // Met à jour la recherche
-                        label = { Text("Rechercher un jeu") },
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        TextField(
+                            value = query,
+                            onValueChange = {
+                                query = it
+                                research =  it}, // Met à jour la recherche
+                            label = { Text("Rechercher un jeu") },
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+
+                        IconButton(
+                            onClick = {
+                                research = query // Met à jour la variable globale
+
+                                val filteredGames = IGDB.games.filter { game ->
+                                    game.name.contains(research, ignoreCase = true) ||
+                                            (game.genres.mapNotNull { genreId -> IGDB.genres.find { it.id == genreId }?.name }).any { genre -> genre.contains(research, ignoreCase = true) } ||
+                                            (game.platforms.mapNotNull { platformId -> IGDB.platforms.find { it.id == platformId }?.name }).any { platform -> platform.contains(research, ignoreCase = true) }
+                                }
+
+                                if (filteredGames.isEmpty()) {
+                                    navController.navigate(NoResearch)
+                                    research = ""
+                                    query = ""
+                                } else {
+                                    DeletedManagement.displayedGames.clear()
+                                    DeletedManagement.displayedGames.addAll(filteredGames)
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Rechercher",
+                                tint = Color.Magenta // Couleur de l’icône
+                            )
+                        }
+                    }
+
                 },
                 expanded = isSearchBarActive, // Indique si la SearchBar est ouverte
                 onExpandedChange = { isSearchBarActive = it },
@@ -118,7 +153,7 @@ fun GameList(navController: NavHostController){
                 modifier = Modifier
                     .fillMaxWidth()
             )
-
+            /*
             if (query.isNotEmpty() && DeletedManagement.displayedGames.isEmpty()) {
                 LaunchedEffect(query) {
                     focusManager.clearFocus()
@@ -127,7 +162,9 @@ fun GameList(navController: NavHostController){
                     query = ""
                 }
             }
-            else if (query.isEmpty() && DeletedManagement.displayedGames.isEmpty()){   //cas où on a tout supprimé
+
+            */
+            if (query.isEmpty() && DeletedManagement.displayedGames.isEmpty()){   //cas où on a tout supprimé
                 SwipeRefresh(
                     state = swipeRefreshState,
                     onRefresh = {

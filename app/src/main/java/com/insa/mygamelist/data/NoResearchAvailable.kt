@@ -1,8 +1,11 @@
 package com.insa.mygamelist.data
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
@@ -21,15 +25,21 @@ fun NoResearchAvailable(navController: NavHostController){
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
     ){
-        IconButton(onClick = {
-            navController.navigateUp()
-        }) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
-        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = "No match game :( \nPlease click the icon below to go back",
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
 
-        Text(
-            text = "No match :("
-        )
+            IconButton(onClick = {
+                navController.navigateUp()
+            }) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+            }
+        }
     }
 
 }
