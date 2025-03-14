@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.28.0")
+    implementation ("androidx.biometric:biometric:1.2.0-alpha05")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
