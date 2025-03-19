@@ -7,7 +7,7 @@ précédent ou au suivant et la logique est bien circulaire.
 
 2. Changement de l'icône de l'app.
 
-3. La mise en favoris des jeux est persistante.
+3. La mise en favoris des jeux est persistante (Datastore).
 
 4. Ajout d'un bouton flottant en bas à droite de la page principale pour remonter en haut de celle-ci.
 
@@ -22,8 +22,8 @@ dans la liste des jeux à côté du logo des favoris et est persistante.
 
 8. Ajout d'un bouton en haut à droite de la page principale pour accéder à une page "profil utilisateur"
 qui comprend : Un logo // un nom/pseudo modifiable et persistant // un affichage des jeux mis en favoris
-(si on l'enlève des favoris depuis le profil, il disparait de cette liste)
+(si on l'enlève des favoris depuis le profil, il disparait bien de cette liste)
 
 9. Ajout du système d'authentification au lancement de l'application. Si aucun système n'est détecté
-(normalement pas le cas car il y a en généralau moins un MDP), l'application est lancée quand même
+(normalement pas le cas car il y a en général au moins un MDP), l'application est lancée quand même
 pour ne pas bloquer certains potentiels tests avec de tels appareils.
